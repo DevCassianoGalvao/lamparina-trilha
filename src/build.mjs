@@ -18,6 +18,7 @@ const sol = (slug) => SOLUTIONS.find((s) => s.slug === slug);
 const aud = (slug) => AUDIENCES.find((a) => a.slug === slug);
 const cat = (slug) => BLOG_CATS.find((c) => c[0] === slug);
 const term = (slug) => TERMS.find((t) => t[0] === slug);
+const AUD_MENU = { comunidades: 'Informação e apoio técnico para participar de decisões.', empresas: 'Leitura territorial, prevenção de riscos e relacionamento.', organizacoes: 'Diagnóstico, planejamento, governança e gestão.' };
 const AUD_ICON = { comunidades: 'users', empresas: 'building', organizacoes: 'sprout' };
 
 /* ------------------------------------------------------------------ */
@@ -99,7 +100,7 @@ function header(c) {
         <ul class="mega glass" id="m-sol" role="list">${SOLUTIONS.map((s) => `<li><a href="${c.href('solucoes/' + s.slug)}"${ac('solucoes/' + s.slug)}><span class="mi">${icon(s.icon, '')}</span><strong>${s.name}</strong><small>${s.menu}</small></a></li>`).join('')}
         <li class="mega-all-li" style="grid-column:1/-1"><a class="mega-all" href="${c.href('solucoes')}"><strong>Ver todas as soluções</strong>${icon('arrow', '')}</a></li></ul></li>
       <li class="has-menu${cur('para-quem')}"><button class="nav-trigger" aria-expanded="false" aria-controls="m-pq">Para quem atuamos ${icon('chevron', '')}</button>
-        <ul class="mega mega--sm glass" id="m-pq" role="list">${AUDIENCES.map((a) => `<li><a href="${c.href('para-quem/' + a.slug)}"${ac('para-quem/' + a.slug)}><span class="mi">${icon(AUD_ICON[a.key], '')}</span><strong>${a.name}</strong><small>${a.card.split(',')[0]}.</small></a></li>`).join('')}</ul></li>
+        <ul class="mega mega--sm glass" id="m-pq" role="list">${AUDIENCES.map((a) => `<li><a href="${c.href('para-quem/' + a.slug)}"${ac('para-quem/' + a.slug)}><span class="mi">${icon(AUD_ICON[a.key], '')}</span><strong>${a.name}</strong><small>${AUD_MENU[a.key]}</small></a></li>`).join('')}</ul></li>
       <li><a href="${c.href('projetos-territorios')}"${c.section === 'projetos-territorios' ? ' aria-current="page"' : ''}>Projetos e territórios</a></li>
       <li class="has-menu${cur('blog')}${cur('glossario')}"><button class="nav-trigger" aria-expanded="false" aria-controls="m-cont">Conteúdos ${icon('chevron', '')}</button>
         <ul class="mega mega--sm glass" id="m-cont" role="list">${sub([['blog', 'Blog', 'Artigos, guias e análises.', 'book'], ['glossario', 'Glossário', 'Termos socioambientais em linguagem clara.', 'quote']])}</ul></li>
