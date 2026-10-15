@@ -110,7 +110,7 @@ function header(c) {
       <a class="btn btn--primary btn--sm nav-cta" href="${c.href('contato')}" data-magnetic><span>Fale com a Trilha</span>${icon('arrow')}</a>
       <button class="icon-btn menu-toggle" type="button" aria-expanded="false" aria-controls="menu-mobile" aria-label="Abrir menu"><span class="bars"><i></i><i></i><i></i></span></button>
     </div>
-  </div><div class="route-progress" aria-hidden="true"><i></i></div></div></header>
+  </div></div></header>
   <div class="mobile-panel on-dark" id="menu-mobile" aria-label="Menu">
     <ul>
       <li><a href="${c.href('')}">Início ${icon('arrow', '')}</a></li>
@@ -349,7 +349,7 @@ ${finalCta(c)}`,
 /* Página genérica com hero                                            */
 /* ------------------------------------------------------------------ */
 function pageHero(c, { crumbs: cr, kick, h1, lede, ctas = '', ill = '', dark = false, illClass = 'glass', after = '' }) {
-  return `<section class="page-hero ${dark ? 'page-hero--dark on-dark' : ''}">${aura()}${contours(c, 1, dark)}
+  return `<section class="page-hero ${dark ? 'page-hero--dark on-dark' : ''} ${ill ? '' : 'page-hero--center'}">${aura()}${contours(c, 1, dark)}
   <div class="wrap ph-grid">
     <div class="ph-copy">
       ${crumbs(c, cr)}
@@ -366,7 +366,7 @@ function pageHero(c, { crumbs: cr, kick, h1, lede, ctas = '', ill = '', dark = f
 function aTrilha(c) {
   return page(c, {
     title: 'Nossa história', desc: 'Uma consultoria que nasceu do território: da região de Porto Trombetas, em Oriximiná, ao modelo atual de equipes multidisciplinares.',
-    body: `${pageHero(c, { crumbs: [['A Trilha', 'a-trilha']], kick: 'A Trilha', h1: 'Uma consultoria que nasceu do território.', lede: 'A Trilha surgiu para apoiar decisões complexas onde desenvolvimento, direitos, ambiente e modos de vida se encontram. Desde o início, aprendemos que uma solução só se sustenta quando combina qualidade técnica, escuta verdadeira e capacidade de articulação.', ill: `<div class="river-map" style="width:100%;height:100%;aspect-ratio:auto">${ILL.riverMap()}</div>`, illClass: 'glass glass--dark', ctas: btn(c.href('como-atuamos'), 'Conheça como atuamos', 'btn--primary') })}
+    body: `${pageHero(c, { crumbs: [['A Trilha', 'a-trilha']], kick: 'A Trilha', h1: 'Uma consultoria que nasceu do território.', lede: 'A Trilha surgiu para apoiar decisões complexas onde desenvolvimento, direitos, ambiente e modos de vida se encontram. Desde o início, aprendemos que uma solução só se sustenta quando combina qualidade técnica, escuta verdadeira e capacidade de articulação.', ill: `<div class="river-map" style="width:100%;height:100%;aspect-ratio:auto">${ILL.riverMap()}</div>`, illClass: 'ph-ill--bare', ctas: btn(c.href('como-atuamos'), 'Conheça como atuamos', 'btn--primary') })}
 <section class="section"><div class="wrap grid-2">
   <div><h2 class="h2" style="color:var(--forest);margin-bottom:2rem" data-reveal>Nossa história</h2>
     <ol class="timeline" role="list">
@@ -475,7 +475,7 @@ function publico(c, a) {
     body: `${pageHero(c, { crumbs: [['Para quem atuamos', 'para-quem/' + a.slug], [a.name, 'para-quem/' + a.slug]], kick: a.name, h1: a.h1, lede: a.text, ill: ILL.audienceIll(a.key), ctas: btn(contactHref(c, a.profile), a.cta, 'btn--primary', 'data-magnetic') })}
 <section class="section"><div class="wrap">
   <div class="sec-head">${kicker(a.listTitle)}<h2 class="h2" style="color:var(--forest)" data-reveal>${a.key === 'comunidades' ? 'Quando o apoio técnico faz diferença.' : 'Onde a Trilha pode contribuir.'}</h2></div>
-  <ul class="value-grid" role="list" style="--cols:${a.items.length <= 5 ? a.items.length : 4}">${a.items.map((it, i) => `<li class="value-card is-compact glass spot" data-reveal style="--d:${(i % 4) * 80}"><span class="v-ico">${icon(it[1], '')}</span><h3>${it[0]}</h3></li>`).join('')}</ul>
+  <ul class="value-grid ${a.items.length === 5 ? 'value-grid--stack' : ''}" role="list" style="--cols:${a.items.length <= 5 ? a.items.length : 4}">${a.items.map((it, i) => `<li class="value-card is-compact glass spot" data-reveal style="--d:${(i % 4) * 80}"><span class="v-ico">${icon(it[1], '')}</span><h3>${it[0]}</h3></li>`).join('')}</ul>
 </div></section>
 <section class="section section--dark">${aura()}${contours(c, 2, true)}<div class="wrap">
   <div class="sec-head">${kicker('Soluções indicadas')}<h2 class="h2" data-reveal>Caminhos mais usados por ${a.short.toLowerCase()}.</h2></div>

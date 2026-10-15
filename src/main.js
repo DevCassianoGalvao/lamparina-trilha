@@ -13,14 +13,11 @@
 
   /* ---------- Cabeçalho: estado de rolagem + progresso da rota ---------- */
   const header = $('.site-header');
-  const progress = $('.route-progress i');
   let ticking = false;
   const onScroll = () => {
     const y = window.scrollY;
     body.classList.toggle('is-scrolled', y > 24);
     body.classList.toggle('show-mobile-cta', y > window.innerHeight * 0.7);
-    const max = document.documentElement.scrollHeight - window.innerHeight;
-    if (progress) progress.style.setProperty('--p', max > 0 ? Math.min(1, y / max).toFixed(4) : 0);
     methodProgress();
     checkReveal();
     ticking = false;
