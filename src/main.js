@@ -22,6 +22,7 @@
     const max = document.documentElement.scrollHeight - window.innerHeight;
     if (progress) progress.style.setProperty('--p', max > 0 ? Math.min(1, y / max).toFixed(4) : 0);
     methodProgress();
+    checkReveal();
     ticking = false;
   };
   window.addEventListener('scroll', () => { if (!ticking) { requestAnimationFrame(onScroll); ticking = true; } }, { passive: true });
@@ -65,14 +66,21 @@
     if ((e.key === '/' && !typing) || ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k')) { e.preventDefault(); openSearch(); }
   });
 
-  /* ---------- Animações de entrada ---------- */
-  const revealEls = $$('[data-reveal]');
-  if ('IntersectionObserver' in window && !reduce) {
-    const io = new IntersectionObserver((entries) => entries.forEach((en) => {
-      if (en.isIntersecting) { en.target.classList.add('is-in'); io.unobserve(en.target); }
-    }), { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
-    revealEls.forEach((el) => io.observe(el));
-  } else revealEls.forEach((el) => el.classList.add('is-in'));
+  /* ---------- Animações de entrada ----------
+     Verificação por posição (getBoundingClientRect) a cada rolagem: mais confiável que
+     IntersectionObserver para elementos com clip-path ou transform. */
+  const pendingReveal = new Set($$('[data-reveal]'));
+  function checkReveal() {
+    if (!pendingReveal.size) return;
+    const vh = window.innerHeight;
+    pendingReveal.forEach((el) => {
+      const r = el.getBoundingClientRect();
+      if (r.top < vh * 0.94) { el.classList.add('is-in'); pendingReveal.delete(el); }
+    });
+  }
+  if (reduce) pendingReveal.forEach((el) => el.classList.add('is-in'));
+  window.addEventListener('resize', checkReveal, { passive: true });
+  window.addEventListener('load', checkReveal);
 
   /* ---------- Luz que segue o ponteiro, inclinação e botões magnéticos ---------- */
   if (finePointer && !reduce) {

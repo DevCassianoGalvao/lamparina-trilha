@@ -46,7 +46,7 @@ const btn = (href, label, cls = '', extra = '') => `<a class="btn ${cls}" href="
 const kicker = (t) => `<p class="kicker">${t}</p>`;
 const crumbs = (c, items) => `<nav class="breadcrumb" aria-label="Você está em"><ol><li><a href="${c.href('')}">Início</a></li>${items.map((it, i) => i === items.length - 1 ? `<li aria-current="page">${it[0]}</li>` : `<li><a href="${c.href(it[1])}">${it[0]}</a></li>`).join('')}</ol></nav>`;
 const contactHref = (c, perfil, tema) => c.href('contato') + (perfil || tema ? '?' + [perfil && `perfil=${perfil}`, tema && `tema=${encodeURIComponent(tema)}`].filter(Boolean).join('&') : '');
-const sk = (n = 4) => `<div class="sk" aria-hidden="true">${'<i></i>'.repeat(n)}</div>`;
+const sk = (n = 4, label = 'Texto em produção') => `<div class="text-ph"><span class="tp-label">${icon('doc')}${label}</span><div class="sk" aria-hidden="true">${'<i></i>'.repeat(n)}</div></div>`;
 
 function postCard(c, p, i = 0) {
   const k = cat(p.cat);
@@ -65,8 +65,8 @@ function solCard(c, s, i, variant = '') {
     <span class="more">Conheça a solução ${icon('arrow', '')}</span></a>`;
 }
 
-function ctaBand(c, title, text, label, link) {
-  return `<section class="section section--tight"><div class="wrap"><div class="cta-band glass spot" data-reveal="scale">
+function ctaBand(c, title, text, label, link, extra = '') {
+  return `<section class="section section--tight"><div class="wrap">${extra}<div class="cta-band glass spot" data-reveal="scale">
     <div><h2>${title}</h2>${text ? `<p class="muted" style="margin-top:.6rem;max-width:56ch">${text}</p>` : ''}</div>
     <div class="btn-row">${btn(link, label, 'btn--primary', 'data-magnetic')}</div></div></div></section>`;
 }
@@ -91,7 +91,7 @@ function header(c) {
   const trilhaLinks = [['a-trilha', 'Nossa história', 'De Porto Trombetas ao modelo atual.', 'route'], ['como-atuamos', 'Como atuamos', 'Método em cinco etapas.', 'compass'], ['integridade', 'Independência e integridade', 'Papéis claros e compromissos.', 'shield']];
   const sub = (links) => links.map((l) => `<li><a href="${c.href(l[0])}"${ac(l[0])}><span class="mi">${icon(l[3], '')}</span><strong>${l[1]}</strong><small>${l[2]}</small></a></li>`).join('');
   const isTrilha = ['a-trilha', 'como-atuamos', 'integridade'].includes(c.section);
-  return `<header class="site-header" id="topo"><div class="wrap"><div class="nav-shell">
+  return `<header class="site-header" id="topo"><div class="nav-shell"><div class="nav-inner">
     <a class="brand" href="${c.href('')}" aria-label="Trilha Socioambiental, página inicial"><img src="${c.asset('img/logo-horizontal.png')}" alt="Trilha Consultoria &amp; Gestão Socioambiental" width="900" height="168"></a>
     <nav class="nav" aria-label="Principal"><ul>
       <li class="has-menu${isTrilha ? ' is-current' : ''}"><button class="nav-trigger" aria-expanded="false" aria-controls="m-trilha">A Trilha ${icon('chevron', '')}</button>
@@ -130,7 +130,6 @@ function footer(c) {
   <div class="footer-top">
     <div class="footer-brand"><img src="${c.asset('img/logo-trilha-branco.png')}" alt="Trilha Consultoria &amp; Gestão Socioambiental" width="720" height="432">
       <p class="sign">${SITE.signature}</p><p>${SITE.footerLine}</p>
-      <div class="socials"><a href="${SITE.instagram}" target="_blank" rel="noopener" aria-label="Instagram @trilha.socioambiental (abre em nova aba)">${icon('instagram', '')}</a><a href="#" aria-label="LinkedIn (a confirmar)">${icon('linkedin', '')}</a></div>
     </div>
     <div class="footer-col"><h3>Navegue</h3><ul>
       <li><a href="${c.href('a-trilha')}">A Trilha</a></li><li><a href="${c.href('solucoes')}">Soluções</a></li>
@@ -139,7 +138,8 @@ function footer(c) {
     <div class="footer-col footer-contact"><h3>Contato</h3><ul>
       <li>${icon('mail', '')}<span>${SITE.email}</span></li>
       <li>${icon('whatsapp', '')}<span>${SITE.whatsapp}</span></li>
-      <li>${icon('pin', '')}<span>${SITE.city}</span></li></ul></div>
+      <li>${icon('pin', '')}<span>${SITE.city}</span></li></ul>
+      <div class="socials"><a href="${SITE.instagram}" target="_blank" rel="noopener" aria-label="Instagram @trilha.socioambiental (abre em nova aba)">${icon('instagram', '')}</a><a href="#" aria-label="LinkedIn (a confirmar)">${icon('linkedin', '')}</a></div></div>
     <div class="footer-col newsletter" id="rodape-newsletter"><h3>Receba conteúdos para decidir com mais clareza.</h3>
       <p style="font-size:.92rem">Uma seleção mensal de artigos, referências e aprendizados da Trilha. Sem excesso de mensagens.</p>
       <form data-newsletter novalidate><label class="sr-only" for="nl-${c.path.replace(/\W/g, '') || 'home'}">Seu e-mail</label>
@@ -151,7 +151,6 @@ function footer(c) {
     <p>© <span data-year>2026</span> ${SITE.legal}<br>CNPJ ${SITE.cnpj}</p>
     <ul><li><a href="${c.href('privacidade')}">Privacidade</a></li><li><a href="${c.href('cookies')}">Cookies</a></li><li><a href="${c.href('acessibilidade')}">Acessibilidade</a></li><li><a href="${c.href('integridade')}">Integridade</a></li><li><button type="button" data-cookie-open style="background:none;border:0;padding:0;color:inherit;font-size:inherit;text-decoration:underline">Preferências de cookies</button></li></ul>
   </div>
-  <p class="footer-word" aria-hidden="true">Trilha</p>
   </div></footer>`;
 }
 
@@ -349,7 +348,7 @@ ${finalCta(c)}`,
 /* ------------------------------------------------------------------ */
 /* Página genérica com hero                                            */
 /* ------------------------------------------------------------------ */
-function pageHero(c, { crumbs: cr, kick, h1, lede, ctas = '', ill = '', dark = false, illClass = 'glass' }) {
+function pageHero(c, { crumbs: cr, kick, h1, lede, ctas = '', ill = '', dark = false, illClass = 'glass', after = '' }) {
   return `<section class="page-hero ${dark ? 'page-hero--dark on-dark' : ''}">${aura()}${contours(c, 1, dark)}
   <div class="wrap ph-grid">
     <div class="ph-copy">
@@ -360,7 +359,7 @@ function pageHero(c, { crumbs: cr, kick, h1, lede, ctas = '', ill = '', dark = f
       ${ctas ? `<div class="btn-row" data-reveal style="--d:220">${ctas}</div>` : ''}
     </div>
     ${ill ? `<div class="ph-ill ${illClass} ${dark ? 'glass--dark' : ''}" data-reveal="scale" style="--d:150">${ill}</div>` : ''}
-  </div></section>`;
+  </div>${after ? `<div class="wrap ph-after">${after}</div>` : ''}</section>`;
 }
 
 /* ---------- A Trilha / Nossa história ---------- */
@@ -379,13 +378,12 @@ function aTrilha(c) {
 </div></section>
 <section class="section section--dark">${aura()}<div class="wrap">
   <div class="sec-head">${kicker('Valores')}<h2 class="h2" data-reveal>O que orienta cada trabalho.</h2></div>
-  <ul class="value-grid" role="list">${VALUES.map((v, i) => `<li class="value-card glass glass--dark spot" data-reveal style="--d:${(i % 3) * 100}"><span class="v-ico">${icon(v[1], '')}</span><h3>${v[0]}</h3></li>`).join('')}</ul>
+  <ul class="value-grid" role="list" style="--cols:3">${VALUES.map((v, i) => `<li class="value-card is-compact glass glass--dark spot" data-reveal style="--d:${(i % 3) * 100}"><span class="v-ico">${icon(v[1], '')}</span><h3>${v[0]}</h3></li>`).join('')}</ul>
 </div></section>
 <section class="section section--sand2"><div class="wrap">
   <div class="sec-head">${kicker('Equipe')}<h2 class="h2" style="color:var(--forest)" data-reveal>Equipe fixa e rede multidisciplinar.</h2><p class="lede">${validate('Aguardando minibiografias e fotos autorizadas')}</p></div>
   <div class="team">${[1, 2, 3, 4].map((n, i) => `<div class="team-card glass" data-reveal style="--d:${i * 90}">${photo('Retrato ' + n, 'Foto autorizada')}${sk(3)}</div>`).join('')}</div>
 </div></section>
-${ctaBand(c, 'Quer entender como a Trilha pode apoiar o seu contexto?', '', 'Conheça como atuamos', c.href('como-atuamos'))}
 ${finalCta(c)}`,
   });
 }
@@ -477,14 +475,13 @@ function publico(c, a) {
     body: `${pageHero(c, { crumbs: [['Para quem atuamos', 'para-quem/' + a.slug], [a.name, 'para-quem/' + a.slug]], kick: a.name, h1: a.h1, lede: a.text, ill: ILL.audienceIll(a.key), ctas: btn(contactHref(c, a.profile), a.cta, 'btn--primary', 'data-magnetic') })}
 <section class="section"><div class="wrap">
   <div class="sec-head">${kicker(a.listTitle)}<h2 class="h2" style="color:var(--forest)" data-reveal>${a.key === 'comunidades' ? 'Quando o apoio técnico faz diferença.' : 'Onde a Trilha pode contribuir.'}</h2></div>
-  <ul class="value-grid" role="list">${a.items.map((it, i) => `<li class="value-card glass spot" data-reveal style="--d:${(i % 3) * 90}"><span class="v-ico">${icon(it[1], '')}</span><h3>${it[0]}</h3></li>`).join('')}</ul>
+  <ul class="value-grid" role="list" style="--cols:${a.items.length <= 5 ? a.items.length : 4}">${a.items.map((it, i) => `<li class="value-card is-compact glass spot" data-reveal style="--d:${(i % 4) * 80}"><span class="v-ico">${icon(it[1], '')}</span><h3>${it[0]}</h3></li>`).join('')}</ul>
 </div></section>
 <section class="section section--dark">${aura()}${contours(c, 2, true)}<div class="wrap">
   <div class="sec-head">${kicker('Soluções indicadas')}<h2 class="h2" data-reveal>Caminhos mais usados por ${a.short.toLowerCase()}.</h2></div>
   <div class="bento">${a.solutions.map((sl, i) => solCard(c, sol(sl), i)).join('')}</div>
 </div></section>
-${a.key === 'comunidades' ? `<section class="section section--tight"><div class="wrap"><div class="notice" data-reveal>${icon('lock', '')}<p><strong>Conversa reservada.</strong> Demandas sensíveis podem seguir para um canal reservado. Não envie documentos confidenciais no primeiro contato: se necessário, a equipe indicará um canal seguro.</p></div></div></section>` : ''}
-${ctaBand(c, a.cta + '.', 'Conte o contexto em poucas linhas. A equipe responde pelo canal que você preferir.', a.cta, contactHref(c, a.profile))}`,
+${ctaBand(c, a.cta + '.', 'Conte o contexto em poucas linhas. A equipe responde pelo canal que você preferir.', a.cta, contactHref(c, a.profile), a.key === 'comunidades' ? `<div class="notice notice--soft" style="margin-bottom:1rem">${icon('lock', '')}<p><strong>Sua conversa pode ser reservada.</strong> Se o assunto for sensível, escolha "Conversa reservada" como canal no formulário. Não envie documentos confidenciais no primeiro contato: a equipe indica um canal seguro quando necessário.</p></div>` : '')}`,
   });
 }
 
@@ -492,9 +489,7 @@ ${ctaBand(c, a.cta + '.', 'Conte o contexto em poucas linhas. A equipe responde 
 function projetos(c) {
   return page(c, {
     title: 'Projetos e territórios', desc: 'Nossa experiência foi formada em contextos amazônicos e vem se ampliando para outras regiões do Brasil.',
-    body: `${pageHero(c, { crumbs: [['Projetos e territórios', 'projetos-territorios']], kick: 'Projetos e territórios', h1: 'Cada território ensina uma forma diferente de construir soluções.', lede: 'Nossa experiência foi formada em contextos amazônicos e vem se ampliando para outras regiões do Brasil. Trabalhamos com leitura de campo, equipes mobilizadas conforme a demanda e articulação entre escalas local e institucional.', dark: true, ill: ILL.badgeIll(ILL.SOL_RAW.pgtaq, { dark: true }) })}
-<section class="section section--dark" style="padding-top:0">${aura()}<div class="wrap">
-  <div class="terr-grid">
+    body: `${pageHero(c, { crumbs: [['Projetos e territórios', 'projetos-territorios']], kick: 'Projetos e territórios', h1: 'Cada território ensina uma forma diferente de construir soluções.', lede: 'Nossa experiência foi formada em contextos amazônicos e vem se ampliando para outras regiões do Brasil. Trabalhamos com leitura de campo, equipes mobilizadas conforme a demanda e articulação entre escalas local e institucional.', dark: true, after: `<div class="terr-grid">
     <div data-reveal="scale"><div class="river-map glass glass--dark">${ILL.riverMap()}<span class="rm-note">Representação esquemática, fora de escala.</span></div>
       <ul class="legend" role="list"><li><i class="l-done"></i>Projetos concluídos</li><li><i class="l-now"></i>Projetos em andamento</li><li><i class="l-net"></i>Rede e capacidade de mobilização</li></ul></div>
     <div style="display:grid;gap:1rem;align-content:start">
@@ -506,7 +501,7 @@ function projetos(c) {
       <p style="font-size:.85rem;color:rgba(233,239,233,.65)">Outros territórios citados em materiais serão incluídos após validação e autorização.</p>
     </div>
   </div>
-</div></section>
+` })}
 <section class="section"><div class="wrap">
   <div class="sec-head sec-head--split"><div style="display:grid;gap:1rem">${kicker('Casos')}<h2 class="h2" style="color:var(--forest)" data-reveal>Trabalhos que podem ser compartilhados.</h2></div><p class="muted">Cada caso é publicado com autorização das partes envolvidas, sem informações sensíveis.</p></div>
   <div class="filters" role="group" aria-label="Filtrar casos">${['Todos', 'Comunidades', 'Empresas', 'Organizações'].map((f, i) => `<button class="filter" type="button" aria-pressed="${i === 0}" data-filter="${i === 0 ? '*' : f.toLowerCase()}">${f}</button>`).join('')}</div>
